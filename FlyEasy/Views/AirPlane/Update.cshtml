@@ -1,0 +1,53 @@
+﻿@model AirPlane
+
+@{
+    ViewData["Title"] = "Edit Airplane";
+}
+
+<div class="container mt-5 mb-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Edit Airplane</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Update" method="post">
+                <input type="hidden" asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="TailNumber" class="form-label"></label>
+                    <input asp-for="TailNumber" class="form-control" />
+                    <span asp-validation-for="TailNumber" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Capacity" class="form-label"></label>
+                    <input asp-for="Capacity" class="form-control" type="number" min="1" step="1"/>
+                    <span asp-validation-for="Capacity" class="text-danger"></span>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-primary me-md-2">
+                        <i class="bi bi-pencil-square"></i> Update
+                    </button>
+                    <a asp-action="GetAll" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

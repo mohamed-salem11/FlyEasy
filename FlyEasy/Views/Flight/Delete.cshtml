@@ -1,0 +1,62 @@
+﻿@model FlyEasy.Models.Flight
+
+@{
+    ViewData["Title"] = "Delete Flight";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="card border-danger shadow">
+        <div class="card-header bg-danger text-white">
+            <h3 class="mb-0">Confirm Deletion</h3>
+        </div>
+        <div class="card-body">
+            <h5 class="text-danger mb-3">Are you sure you want to delete this flight?</h5>
+
+            <dl class="row">
+                <dt class="col-sm-3">From</dt>
+                <dd class="col-sm-9">@Model.From</dd>
+
+                <dt class="col-sm-3">To</dt>
+                <dd class="col-sm-9">@Model.To</dd>
+
+                <dt class="col-sm-3">Departure</dt>
+                <dd class="col-sm-9">@Model.DepartureTime.ToString("g")</dd>
+
+                <dt class="col-sm-3">Arrival</dt>
+                <dd class="col-sm-9">@Model.ArrivalTime</dd>
+
+                <dt class="col-sm-3">Price</dt>
+                <dd class="col-sm-9">@Model.Price</dd>
+
+                <dt class="col-sm-3">Available Seats</dt>
+                <dd class="col-sm-9">@Model.AvailableSeats</dd>
+
+                <dt class="col-sm-3">Total Seats</dt>
+                <dd class="col-sm-9">@Model.TotalSeats</dd>
+
+                <dt class="col-sm-3">Airplane ID</dt>
+                <dd class="col-sm-9">@Model.AirPlaneId</dd>
+
+         
+                <dt class="col-sm-3">Allowed Baggage</dt>
+                <dd class="col-sm-9">@Model.AllowedBaggage</dd>
+
+        
+                <dt class="col-sm-3">Flight Class</dt>
+                <dd class="col-sm-9">@Model.FlightClass</dd>
+            </dl>
+
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+                    <a asp-action="GetAll" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,121 @@
+﻿@model List<FlyEasy.Models.Flight>
+
+@{
+    ViewData["Title"] = "Flights";
+}
+<style>
+    .btn-edit {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+    }
+
+        .btn-edit:hover {
+            background-color: #5a6268;
+            color: white;
+        }
+
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+    }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+            color: white;
+        }
+
+    .btn-view {
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+    }
+
+        .btn-view:hover {
+            background-color: #0b5ed7;
+            color: white;
+        }
+
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: white;
+    }
+</style>
+<div class="alert alert-info d-flex justify-content-between align-items-center shadow-sm mb-4 mt-4">
+    <div>
+        <i class="bi bi-airplane-fill me-2"></i>
+        We found <strong>@Model.Count flights</strong> matching your criteria.
+    </div>
+    <a asp-action="Search" class="btn btn-sm btn-outline-primary">
+        <i class="bi bi-plus-circle"></i> New Search
+    </a>
+</div>
+
+
+@if (Model != null && Model.Any())
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary fw-bold">@item.From → @item.To</h5>
+                        <p class="mb-1"><strong>Departure:</strong> @item.DepartureTime.ToString("g")</p>
+                        <p class="mb-1"><strong>Arrival:</strong> @item.ArrivalTime.ToString("g")</p>
+                        <p class="mb-1"><strong>Price:</strong> $@item.Price</p>
+                        <p class="mb-1"><strong>Available Seats:</strong> @item.AvailableSeats</p>
+                        <p class="mb-1"><strong>Total Seats:</strong> @item.TotalSeats</p>
+                        <p class="mb-1"><strong>Baggage:</strong> @item.AllowedBaggage kg</p>
+                        <p class="mb-1"><strong>Class:</strong> @item.FlightClass</p>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <p class="mb-3"><strong>Airplane ID:</strong> @item.AirPlaneId</p>
+                        }
+                        <div class="d-flex flex-wrap gap-2">
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-sm btn-edit">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-delete">
+                                    <i class="bi bi-trash"></i> Delete
+                                </a>
+                                <a asp-controller="Booking" asp-action="ViewApplicants" asp-route-id="@item.Id" class="btn btn-sm btn-view">
+                                    <i class="bi bi-people"></i> View Applicants
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Booking" asp-action="Apply" asp-route-id="@item.Id" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-person-plus"></i> Apply
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+}
+else
+{
+    <div class="alert alert-secondary text-center mb-5">
+        No flights found.
+    </div>
+}
+
+
+
+
+
+
+
+
+
+
+
+

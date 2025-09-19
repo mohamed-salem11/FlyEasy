@@ -1,0 +1,61 @@
+﻿@model List<FlyEasy.Models.Booking>
+
+<style>
+    .active-on-click:active,
+    .active-on-click:focus {
+        background-color: #0d6efd;
+        color: white;
+        border-color: #0d6efd;
+    }
+</style>
+
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<div class="container mt-5">
+
+    <!-- ✈️ Enhanced Header Box -->
+    <div class="alert alert-primary d-flex justify-content-between align-items-center shadow-sm mb-4">
+        <div>
+            <i class="bi bi-journal-bookmark-fill me-2"></i>
+            <strong>My Bookings</strong> — Review your flight reservations and passenger details.
+        </div>
+        <span class="badge bg-light text-primary fw-semibold">
+            @Model.Count booking@(Model.Count == 1 ? "" : "s")
+        </span>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle me-2"></i>
+            You have no bookings yet.
+        </div>
+    }
+    else
+    {
+        foreach (var booking in Model)
+        {
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <strong>Booking Date:</strong> @booking.BookingDate.ToString("dd/MM/yyyy HH:mm")
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-primary fw-bold">
+                        @booking.Flight.From → @booking.Flight.To
+                    </h5>
+                    <p class="mb-1"><strong>Departure:</strong> @booking.Flight.DepartureTime.ToString("dd/MM/yyyy HH:mm")</p>
+                    <p class="mb-1"><strong>Tickets:</strong> @booking.NumberOfTickets</p>
+                    <p class="mb-3"><strong>Total Price:</strong> $@booking.TotalPrice</p>
+
+                    <div class="text-end">
+                        <a asp-action="ViewPassengers" asp-route-id="@booking.Id" class="btn btn-outline-primary active-on-click">
+                            <i class="bi bi-people-fill me-1"></i> View Passengers
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

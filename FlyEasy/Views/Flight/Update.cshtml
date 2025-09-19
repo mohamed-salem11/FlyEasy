@@ -1,0 +1,135 @@
+﻿@model FlyEasy.Models.Flight
+@{
+    ViewData["Title"] = "Edit Flight";
+}
+
+<div class="container mt-5 mb-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Edit Flight</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Update" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="From" class="form-label"></label>
+                    <input asp-for="From" class="form-control" />
+                    <span asp-validation-for="From" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="To" class="form-label"></label>
+                    <input asp-for="To" class="form-control" />
+                    <span asp-validation-for="To" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DepartureTime" class="form-label"></label>
+                    <input asp-for="DepartureTime" class="form-control" type="datetime-local" />
+                    <span asp-validation-for="DepartureTime" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Flight Duration</label>
+                    <div class="duration-input d-flex align-items-center">
+                        <input type="number" id="hours" min="0" max="23" value="0" class="form-control me-2" style="width: 80px;">
+                        <span class="me-3">Hour</span>
+                        <input type="number" id="minutes" min="0" max="59" value="0" class="form-control me-2" style="width: 80px;">
+                        <span>Minute</span>
+                    </div>
+                    <input asp-for="ArrivalTime" type="hidden" id="hiddenDuration" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Price" class="form-label"></label>
+                    <input asp-for="Price" class="form-control" type="number" min="1" step="1" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="TotalSeats" class="form-label"></label>
+                    <input asp-for="TotalSeats" class="form-control" type="number" min="1" step="1" />
+                    <span asp-validation-for="TotalSeats" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="AirPlaneId" class="form-label"></label>
+                    <select asp-for="AirPlaneId" class="form-select" asp-items="ViewBag.AirPlaneId"></select>
+                    <span asp-validation-for="AirPlaneId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="AllowedBaggage" class="form-label"></label>
+                    <input asp-for="AllowedBaggage" class="form-control" />
+                    <span asp-validation-for="AllowedBaggage" class="text-danger"></span>
+                </div>
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="mb-3">
+                        <label asp-for="FlightClass" class="form-label">Flight Class</label>
+                        <select asp-for="FlightClass" class="form-select">
+                            <option value="">-- Select Class --</option>
+                            <option value="Economy" selected="@Model.FlightClass == " Economy"">Economy</option>
+                            <option value="Premium Economy" selected="@Model.FlightClass == " Premium Economy"">Premium Economy</option>
+                            <option value="Business" selected="@Model.FlightClass == " Business"">Business</option>
+                            <option value="First Class" selected="@Model.FlightClass == " First Class"">First Class</option>
+                        </select>
+                        <span asp-validation-for="FlightClass" class="text-danger"></span>
+                    </div>
+                }
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-primary me-md-2">
+                        <i class="bi bi-pencil-square"></i> Save
+                    </button>
+                    <a asp-action="GetAll" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function updateDuration() {
+            var hours = parseInt(document.getElementById('hours').value) || 0;
+            var minutes = parseInt(document.getElementById('minutes').value) || 0;
+
+            var timeSpan = hours.toString().padStart(2, '0') + ':' +
+                          minutes.toString().padStart(2, '0') + ':00';
+
+            document.getElementById('hiddenDuration').value = timeSpan;
+        }
+
+        function loadExistingDuration() {
+            var existingValue = document.getElementById('hiddenDuration').value;
+            if (existingValue) {
+                var parts = existingValue.split(':');
+                if (parts.length >= 2) {
+                    document.getElementById('hours').value = parseInt(parts[0]) || 0;
+                    document.getElementById('minutes').value = parseInt(parts[1]) || 0;
+                }
+            }
+        }
+
+        document.getElementById('hours').addEventListener('input', updateDuration);
+        document.getElementById('minutes').addEventListener('input', updateDuration);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadExistingDuration();
+            updateDuration();
+        });
+
+        document.querySelector('form').addEventListener('submit', function(e) {
+            updateDuration();
+        });
+    </script>
+}
